@@ -29,7 +29,12 @@
       "PowerShell(git push *)",
       "PowerShell(Set-Location *)",
       "PowerShell(node \"$env:TEMP\\\\creeum_img\\\\shot.js\")",
-      "PowerShell(node \"$env:TEMP\\\\creeum_img\\\\verify.js\")"
+      "PowerShell(node \"$env:TEMP\\\\creeum_img\\\\verify.js\")",
+      "PowerShell($base = \"https://sjuturwwkeysxdpsnunr.supabase.co/rest/v1\"; $key = \"sb_publishable_EMUXwAjmDaJAPG-g6L1obg_g8nnZPbd\"; $h = @{ apikey = $key; Authorization = \"Bearer $key\" }; foreach \\($t in @\\(\"geckos\",\"inquiries\"\\)\\) { try { $r = Invoke-WebRequest -Uri \"$base/$t`?select=id&limit=1\" -Headers $h -TimeoutSec 10 -UseBasicParsing; \"$t : OK \\($\\($r.StatusCode\\)\\) → $\\($r.Content\\)\" } catch { $code = $_.Exception.Response.StatusCode.value__; $body = \"\"; try { $body = \\(New-Object System.IO.StreamReader\\($_.Exception.Response.GetResponseStream\\(\\)\\)\\).ReadToEnd\\(\\) } catch {}; \"$t : 실패 \\($code\\) → $body\" } })",
+      "PowerShell($base = \"https://sjuturwwkeysxdpsnunr.supabase.co/rest/v1\"; $key = \"sb_publishable_EMUXwAjmDaJAPG-g6L1obg_g8nnZPbd\"; $h = @{ apikey = $key; Authorization = \"Bearer $key\"; Prefer = \"return=representation\" }; try { $r = Invoke-WebRequest -Uri \"$base/geckos?id=eq.g_1779881708505_ubem\" -Method Delete -Headers $h -TimeoutSec 10 -UseBasicParsing; \"삭제 응답: $\\($r.StatusCode\\) → $\\($r.Content\\)\" } catch { $code=$_.Exception.Response.StatusCode.value__; \"삭제 시도 결과: $code \\(권한 없음일 가능성\\)\" }; Start-Sleep -Milliseconds 300; $c = Invoke-WebRequest -Uri \"$base/geckos?select=id\" -Headers @{apikey=$key;Authorization=\"Bearer $key\"} -UseBasicParsing; \"현재 남은 개체: $\\($c.Content\\)\")",
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'Supabase 연결: config.js에 프로젝트 URL/publishable 키 입력 + 초기 설정 SQL\\(supabase-setup.sql\\) 추가 *)",
+      "Bash(git push *)"
     ]
   }
 }
