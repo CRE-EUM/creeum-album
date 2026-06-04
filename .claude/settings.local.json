@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"C:\\\\Users\\\\user\\\\OneDrive - uc.ac.kr\\\\바탕 화면\\\\클로드\\\\CREEUM\" 2>&1; echo \"---\"; ls \"C:\\\\Users\\\\user\\\\OneDrive - uc.ac.kr\\\\바탕 화면\\\\클로드\" 2>&1)",
+      "Bash(npm --version)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "Bash(dir \"C:\\\\Users\\\\user\\\\OneDrive - uc.ac.kr\\\\바탕 화면\\\\클로드\\\\CREEUM\")",
+      "PowerShell($py = \\(Get-Command python -ErrorAction SilentlyContinue\\); if \\($py\\) { \"python: $\\($py.Source\\)\"; python --version } else { \"python: 없음\" }; $py3 = \\(Get-Command py -ErrorAction SilentlyContinue\\); if \\($py3\\) { \"py launcher: $\\($py3.Source\\)\" } else { \"py: 없음\" })",
+      "PowerShell(python -m http.server 8080 --directory \"C:\\\\Users\\\\user\\\\OneDrive - uc.ac.kr\\\\바탕 화면\\\\클로드\\\\CREEUM\")",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:8080/catalog.html\" -UseBasicParsing -TimeoutSec 5; \"상태코드: $\\($r.StatusCode\\)  / 길이: $\\($r.Content.Length\\) bytes\" } catch { \"접속 실패: $\\($_.Exception.Message\\)\" })",
+      "PowerShell(foreach \\($u in @\\(\"catalog.html\",\"assets/css/catalog.css\",\"assets/js/catalog.js\"\\)\\) { try { $r = Invoke-WebRequest -Uri \"http://localhost:8080/$u\" -UseBasicParsing -TimeoutSec 5; \"$u  →  $\\($r.StatusCode\\) OK \\($\\($r.Content.Length\\) bytes\\)\" } catch { \"$u  →  실패: $\\($_.Exception.Message\\)\" } })",
+      "PowerShell(foreach \\($c in @\\(\"git\",\"npm\",\"node\",\"vercel\",\"netlify\"\\)\\) { $g = Get-Command $c -ErrorAction SilentlyContinue; if \\($g\\) { \"$c : 있음 \\($\\($g.Source\\)\\)\" } else { \"$c : 없음\" } })",
+      "PowerShell(node --check \"C:\\\\Users\\\\user\\\\OneDrive - uc.ac.kr\\\\바탕 화면\\\\클로드\\\\CREEUM\\\\assets\\\\js\\\\catalog.js\"; if \\($?\\) { \"catalog.js: 문법 OK\" })",
+      "PowerShell($edge = @\\(\"C:\\\\Program Files \\(x86\\)\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\",\"C:\\\\Program Files\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\"\\) | Where-Object { Test-Path $_ } | Select-Object -First 1; $chrome = @\\(\"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\",\"C:\\\\Program Files \\(x86\\)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\"\\) | Where-Object { Test-Path $_ } | Select-Object -First 1; \"edge: $edge\"; \"chrome: $chrome\")",
+      "Bash(ls -la assets/characters/)",
+      "Bash(find assets *)",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; foreach \\($f in @\\(\"assets\\\\icons\\\\logo.png\",\"assets\\\\characters\\\\characters.png\"\\)\\) { $p = Join-Path \"C:\\\\Users\\\\user\\\\OneDrive - uc.ac.kr\\\\바탕 화면\\\\클로드\\\\CREEUM\" $f; $img = [System.Drawing.Image]::FromFile\\($p\\); \"$f : $\\($img.Width\\) x $\\($img.Height\\)\"; $img.Dispose\\(\\) }; \"--- 도구 확인 ---\"; foreach \\($c in @\\(\"magick\",\"convert\",\"python\"\\)\\) { $g = Get-Command $c -ErrorAction SilentlyContinue; if \\($g\\) { \"$c : 있음\" } else { \"$c : 없음\" } })",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $p = \"C:\\\\Users\\\\user\\\\OneDrive - uc.ac.kr\\\\바탕 화면\\\\클로드\\\\CREEUM\\\\assets\\\\characters\\\\characters.png\"; $img = New-Object System.Drawing.Bitmap\\($p\\); \"PixelFormat: $\\($img.PixelFormat\\)\"; $c = $img.GetPixel\\(2,2\\); \"corner\\(2,2\\): A=$\\($c.A\\) R=$\\($c.R\\) G=$\\($c.G\\) B=$\\($c.B\\)\"; $c2 = $img.GetPixel\\(256,500\\); \"center-label area\\(256,500\\): A=$\\($c2.A\\) R=$\\($c2.R\\) G=$\\($c2.G\\) B=$\\($c2.B\\)\"; $img.Dispose\\(\\))",
+      "PowerShell(python -c \"import PIL; print\\('PIL', PIL.__version__\\)\" 2>&1; python -c \"import numpy; print\\('numpy', numpy.__version__\\)\" 2>&1)",
+      "PowerShell(New-Item *)",
+      "PowerShell(node \"$env:TEMP\\\\creeum_img\\\\crop.js\")",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $src=\"C:\\\\Users\\\\user\\\\OneDrive - uc.ac.kr\\\\바탕 화면\\\\클로드\\\\CREEUM\\\\assets\\\\characters\\\\characters.png\"; $img=New-Object System.Drawing.Bitmap\\($src\\); \"=== 하단 셀\\(0,1\\) hatch: 절대 y, oy=512 ===\"; for\\($y=880;$y -lt 1024;$y+=4\\){ $cnt=0; for\\($x=0;$x -lt 512;$x+=2\\){ $p=$img.GetPixel\\($x,$y\\); if\\([math]::Min\\([math]::Min\\($p.R,$p.G\\),$p.B\\) -lt 220\\){$cnt++} }; \"abs_y=$y \\(local=$\\($y-512\\)\\) nonwhite=$cnt\" }; $img.Dispose\\(\\))",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $src = \"C:\\\\Users\\\\user\\\\OneDrive - uc.ac.kr\\\\바탕 화면\\\\클로드\\\\CREEUM\\\\assets\\\\characters\\\\characters.png\"; $tmp = \"$env:TEMP\\\\creeum_crop\"; $img = New-Object System.Drawing.Bitmap\\($src\\); $cell = New-Object System.Drawing.Bitmap\\(512,512\\); $g = [System.Drawing.Graphics]::FromImage\\($cell\\); $g.DrawImage\\($img, \\(New-Object System.Drawing.Rectangle\\(0,0,512,512\\)\\), \\(New-Object System.Drawing.Rectangle\\(0,512,512,512\\)\\), [System.Drawing.GraphicsUnit]::Pixel\\); $cell.Save\\(\"$tmp\\\\cell01.png\", [System.Drawing.Imaging.ImageFormat]::Png\\); $g.Dispose\\(\\); $cell.Dispose\\(\\); $img.Dispose\\(\\); \"saved\")",
+      "PowerShell(node --check \"C:\\\\Users\\\\user\\\\OneDrive - uc.ac.kr\\\\바탕 화면\\\\클로드\\\\CREEUM\\\\assets\\\\js\\\\catalog.js\"; if \\($?\\) { \"catalog.js: 문법 OK\" }; $out = \"$env:TEMP\\\\creeum_crop\\\\catalog_home.png\"; if \\(Test-Path $out\\) { Remove-Item $out -Force }; & \"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\" --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --screenshot=\"$out\" --window-size=420,900 \"http://localhost:8080/catalog.html\" 2>$null; Start-Sleep -Milliseconds 1500; if \\(Test-Path $out\\) { \"screenshot: $\\(\\(Get-Item $out\\).Length\\) bytes\" } else { \"screenshot 실패\" })",
+      "PowerShell(node \"$env:TEMP\\\\creeum_img\\\\logo.js\")",
+      "PowerShell($out = \"$env:TEMP\\\\creeum_crop\\\\catalog_home2.png\"; if \\(Test-Path $out\\) { Remove-Item $out -Force }; & \"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\" --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --screenshot=\"$out\" --window-size=420,560 \"http://localhost:8080/catalog.html\" 2>$null; Start-Sleep -Milliseconds 1500; if \\(Test-Path $out\\) { \"ok $\\(\\(Get-Item $out\\).Length\\) bytes\" } else { \"실패\" })",
+      "PowerShell(git config *)"
+    ]
+  }
+}

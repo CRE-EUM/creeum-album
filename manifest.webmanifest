@@ -1,0 +1,26 @@
+{
+  "name": "크레이음 개체 관리",
+  "short_name": "크레이음",
+  "description": "크레스티드 게코 개체·혈통·분양 관리 PWA",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f1115",
+  "theme_color": "#0f1115",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "assets/icons/logo.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/logo-src.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

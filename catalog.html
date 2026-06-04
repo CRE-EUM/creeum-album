@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f1115" />
+  <title>크레이음 · 크레스티드 게코 카탈로그</title>
+  <meta name="description" content="크레이음(creeum) 크레스티드 게코 개체 카탈로그" />
+  <meta property="og:title" content="크레이음 · 크레스티드 게코 카탈로그" />
+  <meta property="og:description" content="크레이음에서 만나는 크레스티드 게코 개체들" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/png" href="./assets/icons/logo.png" />
+  <link rel="apple-touch-icon" href="./assets/icons/logo.png" />
+  <link rel="stylesheet" href="./assets/css/catalog.css" />
+</head>
+<body>
+
+  <!-- ───────── 홈 (그리드) ───────── -->
+  <section id="view-home" class="view">
+    <header class="site-header">
+      <div class="brand">
+        <img class="brand-logo" src="./assets/icons/logo.png" alt="크레이음" width="48" height="48" />
+        <div class="brand-text">
+          <h1>크레이음</h1>
+          <p class="tag">크레스티드 게코 카탈로그</p>
+        </div>
+      </div>
+      <div class="header-links">
+        <a class="ig-link" id="chat-link-header" href="https://open.kakao.com/o/sP0qNYrh" target="_blank" rel="noopener" aria-label="분양문의 오픈채팅" title="분양문의 오픈채팅">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+          </svg>
+        </a>
+        <a class="ig-link" href="https://www.instagram.com/cre_eum?igsh=MWFlM2VqdmFocTIw" target="_blank" rel="noopener" aria-label="인스타그램">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5"/>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <a class="inquiry-cta" id="home-inquiry" href="https://open.kakao.com/o/sP0qNYrh" target="_blank" rel="noopener">
+      <span class="inquiry-cta-icon" aria-hidden="true">
+        <img src="./assets/characters/hello.png" alt="" />
+      </span>
+      <span class="inquiry-cta-text">
+        <strong>분양 문의 오픈채팅</strong>
+        <small>궁금한 개체가 있다면 편하게 문의 주세요</small>
+      </span>
+      <span class="inquiry-cta-arrow" aria-hidden="true">›</span>
+    </a>
+
+    <nav class="tabs" id="tabs" role="tablist">
+      <button class="tab is-active" data-cat="all" role="tab">전체</button>
+      <button class="tab" data-cat="수컷" role="tab">수컷</button>
+      <button class="tab" data-cat="암컷" role="tab">암컷</button>
+      <button class="tab" data-cat="미구분" role="tab">미구분</button>
+      <button class="tab" data-cat="분양완료" role="tab">분양완료</button>
+    </nav>
+
+    <main id="grid" class="grid" aria-live="polite">
+      <!-- 카드들이 여기에 렌더링됨 -->
+    </main>
+
+    <div id="empty-state" class="empty-state" hidden>
+      <img id="empty-char" class="empty-char" src="./assets/characters/hello.png" alt="" />
+      <p id="empty-msg" class="empty">등록된 개체가 아직 없습니다.</p>
+    </div>
+
+    <footer class="site-footer">
+      <p>© 크레이음 · <a href="https://www.instagram.com/cre_eum?igsh=MWFlM2VqdmFocTIw" target="_blank" rel="noopener">@cre_eum</a></p>
+      <button id="btn-admin" class="lock" aria-label="관리자 모드" title="관리자 모드">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </button>
+    </footer>
+  </section>
+
+  <!-- ───────── 상세 (한 개체) ───────── -->
+  <section id="view-detail" class="view" hidden>
+    <header class="detail-header">
+      <button id="btn-back" class="icon-btn" aria-label="뒤로">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <h2 id="detail-title">개체</h2>
+      <button id="btn-share" class="icon-btn" aria-label="공유">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/>
+          <circle cx="6" cy="12" r="3"/>
+          <circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+      </button>
+    </header>
+
+    <article class="detail">
+      <div class="detail-photo">
+        <img id="detail-img" alt="" />
+      </div>
+      <div class="detail-body">
+        <span id="detail-cat" class="badge">미구분</span>
+        <h1 id="detail-name">—</h1>
+        <p id="detail-notes" class="notes"></p>
+      </div>
+
+      <button id="btn-inquiry" class="inquiry-btn" type="button">
+        <span aria-hidden="true">💬</span> 이 개체 분양 문의하기
+      </button>
+
+      <div class="detail-actions" id="detail-actions" hidden>
+        <button id="btn-edit" class="ghost">편집</button>
+        <button id="btn-delete" class="danger">삭제</button>
+      </div>
+    </article>
+  </section>
+
+  <!-- ───────── 관리 바 (관리자 모드일 때만) ───────── -->
+  <div id="admin-bar" class="admin-bar" hidden>
+    <span class="admin-tag">운영자 모드</span>
+    <div class="admin-spacer"></div>
+    <button id="btn-new" class="primary">＋ 새 개체</button>
+    <button id="btn-export" class="ghost" title="JSON 내보내기">↓</button>
+    <button id="btn-import" class="ghost" title="JSON 가져오기">↑</button>
+    <input id="import-file" type="file" accept="application/json" hidden />
+    <button id="btn-logout" class="ghost" title="관리자 로그아웃">⎋</button>
+  </div>
+
+  <!-- ───────── 입력/편집 모달 ───────── -->
+  <dialog id="modal" class="modal">
+    <form id="form" method="dialog">
+      <header class="modal-head">
+        <h2 id="modal-title">새 개체</h2>
+        <button type="button" class="icon-btn" id="btn-close" aria-label="닫기">✕</button>
+      </header>
+
+      <div class="modal-body">
+        <label class="photo-input">
+          <span class="lbl">대표사진</span>
+          <input type="file" name="photo" accept="image/*" />
+          <div class="photo-preview" id="photo-preview">
+            <span class="photo-hint">탭해서 사진 선택</span>
+          </div>
+        </label>
+
+        <label>
+          <span class="lbl">이름 *</span>
+          <input name="name" type="text" required maxlength="40" placeholder="예: 이음 1호" />
+        </label>
+
+        <label>
+          <span class="lbl">분류 *</span>
+          <select name="category" required>
+            <option value="미구분">미구분</option>
+            <option value="수컷">수컷</option>
+            <option value="암컷">암컷</option>
+            <option value="분양완료">분양완료</option>
+          </select>
+        </label>
+
+        <label>
+          <span class="lbl">메모 <span class="muted">(선택)</span></span>
+          <textarea name="notes" rows="4" maxlength="500" placeholder="모프, 해칭일, 체중, 특이사항 등 자유롭게"></textarea>
+        </label>
+      </div>
+
+      <footer class="modal-foot">
+        <button type="button" id="btn-cancel" class="ghost">취소</button>
+        <button type="submit" class="primary">저장</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- ───────── 운영자 로그인 모달 ───────── -->
+  <dialog id="login-modal" class="modal">
+    <form id="login-form" method="dialog">
+      <header class="modal-head">
+        <h2>운영자 로그인</h2>
+        <button type="button" class="icon-btn" id="btn-login-close" aria-label="닫기">✕</button>
+      </header>
+      <div class="modal-body">
+        <label>
+          <span class="lbl">이메일</span>
+          <input name="email" type="email" autocomplete="username" required placeholder="운영자 이메일" />
+        </label>
+        <label>
+          <span class="lbl">비밀번호</span>
+          <input name="password" type="password" autocomplete="current-password" required minlength="6" placeholder="비밀번호" />
+        </label>
+        <p id="login-error" class="login-error" role="alert" hidden></p>
+      </div>
+      <footer class="modal-foot">
+        <button type="button" id="btn-login-cancel" class="ghost">취소</button>
+        <button type="submit" class="primary">로그인</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- 토스트 -->
+  <div id="toast" class="toast" hidden></div>
+
+  <!-- Supabase 클라이언트 (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/catalog.js" type="module"></script>
+</body>
+</html>

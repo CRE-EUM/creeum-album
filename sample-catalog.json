@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "geckos": [
+    {
+      "id": "demo000test01",
+      "name": "이음 1호 (테스트)",
+      "category": "수컷",
+      "notes": "모프: Harlequin Pinstripe\n해칭일: 2025-08-01\n체중: 12g\n\n분양문의 테스트용 샘플 개체입니다.",
+      "photo": "",
+      "createdAt": "2026-06-03T09:00:00.000Z",
+      "updatedAt": "2026-06-03T09:00:00.000Z"
+    }
+  ]
+}

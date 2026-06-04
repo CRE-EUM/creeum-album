@@ -1,0 +1,16 @@
+# OS
+Thumbs.db
+ehthumbs.db
+desktop.ini
+.DS_Store
+
+# 에디터
+.vscode/
+.idea/
+
+# 의존성(있다면)
+node_modules/
+
+# 로그/임시
+*.log
+*.tmp
