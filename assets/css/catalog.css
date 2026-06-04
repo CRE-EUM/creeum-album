@@ -613,26 +613,51 @@ body.is-admin .view { padding-bottom: 64px; }
 }
 .photo-preview {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  min-height: 120px;
   background: var(--surface-2);
   border: 2px dashed var(--border);
   border-radius: var(--radius);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+  padding: 10px;
   cursor: pointer;
   transition: border-color .15s;
 }
 .photo-preview:hover { border-color: var(--accent); }
-.photo-preview img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-}
 .photo-hint {
   color: var(--muted);
   font-size: 13px;
+  margin: auto;
 }
+.photo-thumb {
+  position: relative;
+  width: 84px; height: 84px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cover-tag {
+  position: absolute; left: 4px; top: 4px;
+  background: var(--accent); color: var(--accent-fg);
+  font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 999px;
+}
+.photo-x {
+  position: absolute; right: 3px; top: 3px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(0,0,0,.6); color: #fff; border: none;
+  font-size: 11px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.photo-add {
+  width: 84px; height: 84px;
+  border: 2px dashed var(--border); border-radius: 10px;
+  background: transparent; color: var(--muted); font-size: 28px;
+  cursor: pointer;
+}
+.photo-add:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ───────── 토스트 ───────── */
 .toast {
@@ -654,6 +679,73 @@ body.is-admin .view { padding-bottom: 64px; }
   from { opacity: 0; transform: translate(-50%, 8px); }
   to   { opacity: 1; transform: translate(-50%, 0); }
 }
+
+/* ───────── 분양 상태 뱃지 ───────── */
+.status-badge {
+  display: inline-block;
+  font-size: 11px; font-weight: 700;
+  padding: 3px 9px; border-radius: 999px;
+  background: #2e9e5b; color: #fff;
+}
+.status-badge[data-status="분양가능"] { background: #2e9e5b; color: #fff; }
+.status-badge[data-status="예약중"]   { background: #e0a83b; color: #3a2c08; }
+.status-badge[data-status="분양완료"] { background: #8a8f99; color: #fff; }
+.card .status-badge {
+  position: absolute; left: 8px; top: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+.photo-count {
+  position: absolute; right: 8px; bottom: 8px;
+  background: rgba(0,0,0,.6); color: #fff;
+  font-size: 11px; padding: 2px 7px; border-radius: 999px;
+}
+
+/* ───────── 분양가능만 필터 ───────── */
+.filter-bar { padding: 0 20px 12px; }
+.sale-filter {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 13px; color: var(--muted); cursor: pointer;
+}
+.sale-filter input { accent-color: var(--accent); width: 16px; height: 16px; }
+
+/* ───────── 상세: 뱃지/갤러리/문의 ───────── */
+.detail-badges { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.detail-thumbs {
+  display: flex; gap: 8px; margin-top: 10px;
+  overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin;
+}
+.detail-thumb {
+  flex: 0 0 auto; width: 64px; height: 64px;
+  border-radius: 10px; overflow: hidden; padding: 0;
+  border: 2px solid transparent; background: var(--surface-2); cursor: pointer;
+}
+.detail-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.detail-thumb.active { border-color: var(--accent); }
+.detail-inquiry { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+.detail-inquiry .inquiry-btn { flex: 1 1 140px; margin-top: 0; }
+.inquiry-btn.alt {
+  background: var(--surface); color: var(--text); border: 1px solid var(--border);
+}
+
+/* ───────── 문의 폼 / 문의함 ───────── */
+.inquiry-gecko { margin: 0 0 4px; font-size: 13px; font-weight: 600; color: var(--accent); }
+.modal-inner { display: flex; flex-direction: column; max-height: 92dvh; }
+.inq-empty { text-align: center; padding: 30px 20px; }
+.inq-item {
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px 14px; margin-bottom: 10px; background: var(--bg);
+}
+.inq-item.done { opacity: .55; }
+.inq-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.inq-top strong { font-size: 15px; }
+.inq-time { font-size: 11px; color: var(--muted); flex: 0 0 auto; }
+.inq-line { font-size: 13px; margin-top: 4px; }
+.inq-msg {
+  font-size: 13px; margin-top: 6px; padding: 8px 10px;
+  background: var(--surface-2); border-radius: 8px; white-space: pre-wrap;
+}
+.inq-actions { display: flex; gap: 8px; margin-top: 10px; }
+.inq-actions button { padding: 6px 12px; font-size: 12px; }
 
 /* ───────── 반응형 ───────── */
 @media (min-width: 640px) {

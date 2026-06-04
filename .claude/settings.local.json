@@ -28,7 +28,8 @@
       "PowerShell(git config *)",
       "PowerShell(git push *)",
       "PowerShell(Set-Location *)",
-      "PowerShell(node \"$env:TEMP\\\\creeum_img\\\\shot.js\")"
+      "PowerShell(node \"$env:TEMP\\\\creeum_img\\\\shot.js\")",
+      "PowerShell(node \"$env:TEMP\\\\creeum_img\\\\verify.js\")"
     ]
   }
 }

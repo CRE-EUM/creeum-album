@@ -60,6 +60,12 @@
       <button class="tab" data-view="care" role="tab">🦎 사육정보</button>
     </nav>
 
+    <div id="filter-bar" class="filter-bar">
+      <label class="sale-filter">
+        <input type="checkbox" id="sale-only" /> 분양가능만 보기
+      </label>
+    </div>
+
     <main id="grid" class="grid" aria-live="polite">
       <!-- 카드들이 여기에 렌더링됨 -->
     </main>
@@ -144,15 +150,24 @@
       <div class="detail-photo">
         <img id="detail-img" alt="" />
       </div>
+      <div id="detail-thumbs" class="detail-thumbs" hidden></div>
       <div class="detail-body">
-        <span id="detail-cat" class="badge">미구분</span>
+        <div class="detail-badges">
+          <span id="detail-cat" class="badge">미구분</span>
+          <span id="detail-status" class="status-badge" hidden></span>
+        </div>
         <h1 id="detail-name">—</h1>
         <p id="detail-notes" class="notes"></p>
       </div>
 
-      <button id="btn-inquiry" class="inquiry-btn" type="button">
-        <span aria-hidden="true">💬</span> 이 개체 분양 문의하기
-      </button>
+      <div class="detail-inquiry">
+        <button id="btn-inquiry" class="inquiry-btn" type="button">
+          <span aria-hidden="true">💬</span> 오픈채팅으로 문의
+        </button>
+        <button id="btn-reserve" class="inquiry-btn alt" type="button">
+          <span aria-hidden="true">📋</span> 분양 신청서 남기기
+        </button>
+      </div>
 
       <div class="detail-actions" id="detail-actions" hidden>
         <button id="btn-edit" class="ghost">편집</button>
@@ -166,6 +181,7 @@
     <span class="admin-tag">운영자 모드</span>
     <div class="admin-spacer"></div>
     <button id="btn-new" class="primary">＋ 새 개체</button>
+    <button id="btn-inquiries" class="ghost" title="분양 문의함">📬</button>
     <button id="btn-export" class="ghost" title="JSON 내보내기">↓</button>
     <button id="btn-import" class="ghost" title="JSON 가져오기">↑</button>
     <input id="import-file" type="file" accept="application/json" hidden />
@@ -182,10 +198,10 @@
 
       <div class="modal-body">
         <label class="photo-input">
-          <span class="lbl">대표사진</span>
-          <input type="file" name="photo" accept="image/*" />
+          <span class="lbl">사진 <span class="muted">(여러 장 가능 · 첫 장이 대표)</span></span>
+          <input type="file" name="photo" accept="image/*" multiple />
           <div class="photo-preview" id="photo-preview">
-            <span class="photo-hint">탭해서 사진 선택</span>
+            <span class="photo-hint">탭해서 사진 선택 (여러 장 가능)</span>
           </div>
         </label>
 
@@ -205,6 +221,16 @@
         </label>
 
         <label>
+          <span class="lbl">분양 상태</span>
+          <select name="status">
+            <option value="보유중">보유중(비공개 안내)</option>
+            <option value="분양가능">분양가능</option>
+            <option value="예약중">예약중</option>
+            <option value="분양완료">분양완료</option>
+          </select>
+        </label>
+
+        <label>
           <span class="lbl">메모 <span class="muted">(선택)</span></span>
           <textarea name="notes" rows="4" maxlength="500" placeholder="모프, 해칭일, 체중, 특이사항 등 자유롭게"></textarea>
         </label>
@@ -215,6 +241,47 @@
         <button type="submit" class="primary">저장</button>
       </footer>
     </form>
+  </dialog>
+
+  <!-- ───────── 분양 신청/문의 모달 (손님) ───────── -->
+  <dialog id="inquiry-modal" class="modal">
+    <form id="inquiry-form" method="dialog">
+      <header class="modal-head">
+        <h2>분양 신청 / 문의</h2>
+        <button type="button" class="icon-btn" id="btn-inquiry-close" aria-label="닫기">✕</button>
+      </header>
+      <div class="modal-body">
+        <p id="inquiry-gecko" class="inquiry-gecko"></p>
+        <label>
+          <span class="lbl">이름 / 닉네임 *</span>
+          <input name="name" type="text" required maxlength="30" placeholder="성함 또는 닉네임" />
+        </label>
+        <label>
+          <span class="lbl">연락처 *</span>
+          <input name="contact" type="text" required maxlength="60" placeholder="카톡 ID · 전화번호 · 인스타 등" />
+        </label>
+        <label>
+          <span class="lbl">문의 내용 <span class="muted">(선택)</span></span>
+          <textarea name="message" rows="3" maxlength="500" placeholder="궁금한 점이나 희망 사항을 적어주세요"></textarea>
+        </label>
+        <p id="inquiry-error" class="login-error" role="alert" hidden></p>
+      </div>
+      <footer class="modal-foot">
+        <button type="button" id="btn-inquiry-cancel" class="ghost">취소</button>
+        <button type="submit" class="primary">신청하기</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- ───────── 운영자 문의함 모달 ───────── -->
+  <dialog id="inquiry-list-modal" class="modal">
+    <div class="modal-inner">
+      <header class="modal-head">
+        <h2>📬 분양 문의함</h2>
+        <button type="button" class="icon-btn" id="btn-inquiry-list-close" aria-label="닫기">✕</button>
+      </header>
+      <div class="modal-body" id="inquiry-list-body"></div>
+    </div>
   </dialog>
 
   <!-- ───────── 운영자 로그인 모달 ───────── -->
