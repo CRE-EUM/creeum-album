@@ -342,6 +342,69 @@ body.is-admin .card-edit { display: inline-flex; }
 }
 .lock:hover { opacity: 1; background: var(--surface-2); }
 
+/* ───────── 사육정보 ───────── */
+.care-info {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 4px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.care-hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 4px 8px;
+}
+.care-hero-char {
+  width: 76px;
+  height: auto;
+  flex: 0 0 auto;
+}
+.care-hero h2 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: -.01em;
+}
+.care-sub {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.care-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+}
+.care-card h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+.care-card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text);
+}
+.care-card b { color: var(--accent); font-weight: 700; }
+.care-cta {
+  display: block;
+  text-align: center;
+  margin-top: 4px;
+  padding: 14px 16px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: var(--shadow);
+}
+.care-cta:hover { opacity: .94; }
+
 /* ───────── 상세 화면 ───────── */
 .detail-header {
   display: flex;

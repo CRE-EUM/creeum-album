@@ -217,9 +217,21 @@ function bindTabs() {
     const btn = e.target.closest('.tab');
     if (!btn) return;
     $$('.tab').forEach(t => t.classList.toggle('is-active', t === btn));
-    currentCat = btn.dataset.cat;
-    render();
+    if (btn.dataset.view === 'care') {
+      showCare(true);
+    } else {
+      showCare(false);
+      currentCat = btn.dataset.cat;
+      render();
+    }
   });
+}
+
+// 사육정보 탭 ↔ 갤러리 전환
+function showCare(on) {
+  $('#care-info').hidden = !on;
+  $('#grid').hidden = on;
+  if (on) $('#empty-state').hidden = true;
 }
 
 // ───────── 카드 클릭 ─────────

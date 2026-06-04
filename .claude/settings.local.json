@@ -25,7 +25,10 @@
       "PowerShell(node --check \"C:\\\\Users\\\\user\\\\OneDrive - uc.ac.kr\\\\바탕 화면\\\\클로드\\\\CREEUM\\\\assets\\\\js\\\\catalog.js\"; if \\($?\\) { \"catalog.js: 문법 OK\" }; $out = \"$env:TEMP\\\\creeum_crop\\\\catalog_home.png\"; if \\(Test-Path $out\\) { Remove-Item $out -Force }; & \"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\" --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --screenshot=\"$out\" --window-size=420,900 \"http://localhost:8080/catalog.html\" 2>$null; Start-Sleep -Milliseconds 1500; if \\(Test-Path $out\\) { \"screenshot: $\\(\\(Get-Item $out\\).Length\\) bytes\" } else { \"screenshot 실패\" })",
       "PowerShell(node \"$env:TEMP\\\\creeum_img\\\\logo.js\")",
       "PowerShell($out = \"$env:TEMP\\\\creeum_crop\\\\catalog_home2.png\"; if \\(Test-Path $out\\) { Remove-Item $out -Force }; & \"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\" --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --screenshot=\"$out\" --window-size=420,560 \"http://localhost:8080/catalog.html\" 2>$null; Start-Sleep -Milliseconds 1500; if \\(Test-Path $out\\) { \"ok $\\(\\(Get-Item $out\\).Length\\) bytes\" } else { \"실패\" })",
-      "PowerShell(git config *)"
+      "PowerShell(git config *)",
+      "PowerShell(git push *)",
+      "PowerShell(Set-Location *)",
+      "PowerShell(node \"$env:TEMP\\\\creeum_img\\\\shot.js\")"
     ]
   }
 }

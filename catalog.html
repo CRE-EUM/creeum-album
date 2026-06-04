@@ -57,7 +57,7 @@
       <button class="tab" data-cat="수컷" role="tab">수컷</button>
       <button class="tab" data-cat="암컷" role="tab">암컷</button>
       <button class="tab" data-cat="미구분" role="tab">미구분</button>
-      <button class="tab" data-cat="분양완료" role="tab">분양완료</button>
+      <button class="tab" data-view="care" role="tab">🦎 사육정보</button>
     </nav>
 
     <main id="grid" class="grid" aria-live="polite">
@@ -68,6 +68,46 @@
       <img id="empty-char" class="empty-char" src="./assets/characters/hello.png" alt="" />
       <p id="empty-msg" class="empty">등록된 개체가 아직 없습니다.</p>
     </div>
+
+    <!-- ───────── 크레스티드 게코 사육정보 ───────── -->
+    <section id="care-info" class="care-info" hidden>
+      <div class="care-hero">
+        <img src="./assets/characters/note.png" alt="" class="care-hero-char" />
+        <div>
+          <h2>크레스티드 게코 사육 가이드</h2>
+          <p class="care-sub">처음 입양하셨거나 분양 전 참고하세요 🦎</p>
+        </div>
+      </div>
+
+      <article class="care-card">
+        <h3>🏠 사육장</h3>
+        <p>어린 개체는 작은 통, 성체는 <b>30×30×45cm 이상 수직형</b> 공간을 권장합니다. 크레는 나무를 타는 종이라 높이가 중요해요. 코르크·유목·인조식물로 은신처와 등반 구조물을 만들어 주세요.</p>
+      </article>
+
+      <article class="care-card">
+        <h3>🌡️ 온도</h3>
+        <p>적정 온도는 <b>22~26℃</b>. <b>28℃를 넘기면 위험</b>합니다(고온에 약함). 야간은 18~22℃까지 내려가도 괜찮아요. 대부분 실온 사육이 가능하며 별도 핫스팟은 필요 없습니다.</p>
+      </article>
+
+      <article class="care-card">
+        <h3>💧 습도</h3>
+        <p><b>50~70%</b> 유지. 하루 1~2회 분무해 밤에는 촉촉하게, 낮에는 살짝 마르도록 관리하세요. 탈피 시기에는 습도를 충분히 올려야 깔끔하게 벗습니다.</p>
+      </article>
+
+      <article class="care-card">
+        <h3>🍽️ 먹이</h3>
+        <p>크레스티드 게코 전용 푸드(<b>CGD</b>, 예: Pangea·Repashy)를 주 3회가량 급여합니다. 가끔 칼슘을 입힌 곤충(귀뚜라미·밀웜)을 보충해 주면 좋아요. 신선한 물그릇도 항상 비치하세요.</p>
+      </article>
+
+      <article class="care-card">
+        <h3>✋ 핸들링 & 주의</h3>
+        <p>입양 후 <b>1~2주</b>는 적응 기간으로 두고, 핸들링은 짧게 시작하세요. 스트레스를 받으면 <b>꼬리가 잘릴 수 있고, 한 번 잘린 꼬리는 재생되지 않습니다.</b> 수컷끼리는 싸우므로 <b>단독 사육</b>을 권장합니다.</p>
+      </article>
+
+      <a class="care-cta" href="https://open.kakao.com/o/sP0qNYrh" target="_blank" rel="noopener">
+        궁금한 점은 오픈채팅으로 문의 주세요 💬
+      </a>
+    </section>
 
     <footer class="site-footer">
       <p>© 크레이음 · <a href="https://www.instagram.com/cre_eum?igsh=MWFlM2VqdmFocTIw" target="_blank" rel="noopener">@cre_eum</a></p>
