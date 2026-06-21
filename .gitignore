@@ -14,3 +14,9 @@ node_modules/
 # 로그/임시
 *.log
 *.tmp
+
+# 작업용 백업 (배포 제외, 로컬 보관)
+*.bak
+assets/characters/52-sheet.png
+assets/icons/logo-white.png
+assets/icons/logo-old-creeum.png

@@ -1,22 +1,24 @@
 // ─────────────────────────────────────────────────────────────
-//  크레이음 카탈로그 — 단일 페이지 갤러리 + 운영자 모드 (Supabase 연동)
+//  052_CRESTIES 카탈로그 — 단일 페이지 갤러리 + 운영자 모드 (Supabase 연동)
 //  데이터: Supabase(geckos 테이블)  ·  사진: Base64(자동 압축, data JSON에 저장)
 //  읽기: 누구나(공개)   ·   쓰기: 로그인한 운영자만 (RLS로 보호)
 // ─────────────────────────────────────────────────────────────
 
 const CATEGORIES   = ['수컷', '암컷', '미구분', '분양완료'];
 const SALE_STATES  = ['보유중', '분양가능', '예약중', '분양완료'];
-const OPENCHAT_URL = 'https://open.kakao.com/o/sP0qNYrh';
+const OPENCHAT_URL = 'https://open.kakao.com/o/srmknyAi';
 const TABLE        = 'geckos';
 const INQ_TABLE    = 'inquiries';
+const GROWTH_TABLE = 'growth_records';
+const GROWTH_SLOTS = 6;     // 성장기록 사진 칸 수 (6등분)
 
 // 분류별 캐릭터 (빈 화면 일러스트)
 const CHAR_BY_CAT = {
-  all:    './assets/characters/hello.png',
-  '수컷':   './assets/characters/basic.png',
-  '암컷':   './assets/characters/heart.png',
-  '미구분':  './assets/characters/hatch.png',
-  '분양완료': './assets/characters/keyring.png',
+  all:    './assets/characters/52-hero.png',
+  '수컷':   './assets/characters/52-happy.png',
+  '암컷':   './assets/characters/52-love.png',
+  '미구분':  './assets/characters/52-curious.png',
+  '분양완료': './assets/characters/52-sleepy.png',
 };
 
 // ───────── Supabase 클라이언트 ─────────
@@ -32,8 +34,12 @@ if (configured) {
 }
 
 // ───────── 상태 ─────────
-let state = { geckos: [] };
+let state = { geckos: [], growth: [] };
 let currentCat = 'all';
+let currentView = 'gallery';   // 'gallery' | 'growth' | 'care' | 'brand'
+let growthEditingId = null;    // 편집 중인 성장기록 id
+let growthEntries = [];        // 편집 모달의 6칸 [{photo,date,weight} ...]
+let growthSlot = 0;            // 현재 사진 업로드 중인 칸 index
 let editingId = null;
 let saleOnly = false;       // "분양가능만 보기" 필터
 let modalPhotos = [];       // 편집 모달의 사진 목록(data URL[])
@@ -185,8 +191,8 @@ function render() {
     </button>
   `).join('');
 
-  $('#empty-state').hidden = sorted.length > 0;
-  if (sorted.length === 0) {
+  $('#empty-state').hidden = currentView !== 'gallery' || sorted.length > 0;
+  if (currentView === 'gallery' && sorted.length === 0) {
     if (!configured) {
       $('#empty-msg').textContent = 'Supabase 설정이 필요합니다. config.js를 확인하세요.';
     } else if (state.geckos.length === 0) {
@@ -215,7 +221,7 @@ function navigate() {
 function showHome() {
   $('#view-detail').hidden = true;
   $('#view-home').hidden = false;
-  document.title = '크레이음 · 크레스티드 게코 카탈로그';
+  document.title = '052_CRESTIES · 크레스티드 게코 카탈로그';
   window.scrollTo(0, 0);
 }
 
@@ -263,7 +269,7 @@ function showDetail(id) {
     }
   } else {
     photoBox.classList.add('placeholder');
-    photoBox.innerHTML = '<img class="placeholder-char" src="./assets/characters/note.png" alt="" />';
+    photoBox.innerHTML = '<img class="placeholder-char" src="./assets/characters/52-hero.png" alt="" />';
     thumbs.innerHTML = '';
     thumbs.hidden = true;
   }
@@ -271,7 +277,7 @@ function showDetail(id) {
   // 편집/삭제는 운영자만
   $('#detail-actions').hidden = !document.body.classList.contains('is-admin');
 
-  document.title = `${g.name} · 크레이음`;
+  document.title = `${g.name} · 052_CRESTIES`;
   window.scrollTo(0, 0);
 }
 
@@ -281,22 +287,27 @@ function bindTabs() {
     const btn = e.target.closest('.tab');
     if (!btn) return;
     $$('.tab').forEach(t => t.classList.toggle('is-active', t === btn));
-    if (btn.dataset.view === 'care') {
-      showCare(true);
-    } else {
-      showCare(false);
+    const view = btn.dataset.view || 'gallery';
+    setView(view);
+    if (view === 'gallery') {
       currentCat = btn.dataset.cat;
       render();
     }
+    window.scrollTo(0, 0);
   });
 }
 
-// 사육정보 탭 ↔ 갤러리 전환
-function showCare(on) {
-  $('#care-info').hidden = !on;
-  $('#grid').hidden = on;
-  $('#filter-bar').hidden = on;
-  if (on) $('#empty-state').hidden = true;
+// 갤러리 ↔ 성장기록 ↔ 사육정보 ↔ 브랜드 뷰 전환
+function setView(view) {
+  currentView = view;
+  const gallery = view === 'gallery';
+  $('#growth-info').hidden = view !== 'growth';
+  $('#care-info').hidden   = view !== 'care';
+  $('#brand-info').hidden  = view !== 'brand';
+  $('#grid').hidden        = !gallery;
+  $('#filter-bar').hidden  = !gallery;
+  if (!gallery) $('#empty-state').hidden = true;
+  if (view === 'growth') renderGrowth();
 }
 
 // "분양가능만 보기" 필터
@@ -352,7 +363,7 @@ function bindDetail() {
     if (!g) return;
 
     const msg =
-      `[크레이음 분양문의]\n` +
+      `[052_CRESTIES 분양문의]\n` +
       `· 개체: ${g.name}\n` +
       `· 분류: ${g.category}\n` +
       `· 링크: ${location.href}\n\n` +
@@ -633,6 +644,247 @@ function bindInquiryAdmin() {
   });
 }
 
+// ───────── 성장기록 (growth_records) ─────────
+function rowToGrowth(row) {
+  const d = row.data || {};
+  const src = Array.isArray(d.entries) ? d.entries : [];
+  const entries = [];
+  for (let i = 0; i < GROWTH_SLOTS; i++) {
+    const e = src[i] || {};
+    entries.push({ photo: e.photo || '', date: e.date || '', weight: e.weight || '' });
+  }
+  return {
+    id: row.id,
+    createdAt: Number(row.created_at) || 0,
+    nameKo: d.nameKo || '',
+    nameEn: d.nameEn || '',
+    code: d.code || '',
+    entries,
+  };
+}
+function growthToRow(g) {
+  return {
+    id: g.id,
+    created_at: toEpoch(g.createdAt),
+    data: {
+      nameKo: g.nameKo || '',
+      nameEn: g.nameEn || '',
+      code: g.code || '',
+      entries: (g.entries || []).map(e => ({
+        photo: e.photo || '', date: e.date || '', weight: e.weight || '',
+      })),
+    },
+  };
+}
+
+async function loadGrowth() {
+  if (!sb) return;
+  const { data, error } = await sb.from(GROWTH_TABLE)
+    .select('id, created_at, data')
+    .order('created_at', { ascending: false });
+  if (error) { console.error('growth load:', error); return; }
+  state.growth = (data || []).map(rowToGrowth);
+}
+async function saveGrowthRecord(g) {
+  const { error } = await sb.from(GROWTH_TABLE).upsert(growthToRow(g));
+  if (error) throw error;
+}
+async function removeGrowthRecord(id) {
+  const { error } = await sb.from(GROWTH_TABLE).delete().eq('id', id);
+  if (error) throw error;
+}
+
+// "2026-06-18" / "2026.6.18" → "6.18"
+function fmtShortDate(s) {
+  const m = String(s || '').match(/^(\d{4})[-.\/](\d{1,2})[-.\/](\d{1,2})/);
+  return m ? `${Number(m[2])}.${Number(m[3])}` : (s || '');
+}
+
+function renderGrowth() {
+  const list = $('#growth-list');
+  const empty = $('#growth-empty');
+  if (!state.growth.length) {
+    list.innerHTML = '';
+    empty.hidden = false;
+    $('#growth-empty .empty').textContent = !configured
+      ? 'Supabase 설정이 필요합니다. config.js를 확인하세요.'
+      : (isAdmin() ? '＋ 새 성장기록 버튼으로 첫 기록을 만들어보세요.'
+                   : '아직 등록된 성장기록이 없습니다.');
+    return;
+  }
+  empty.hidden = true;
+  list.innerHTML = state.growth.map(growthCardHtml).join('');
+}
+
+function growthCardHtml(g) {
+  const cells = g.entries.map((e, i) => {
+    const meta = [fmtShortDate(e.date), e.weight ? `${escapeHtml(e.weight)}g` : '']
+      .filter(Boolean).join(' · ');
+    return `<figure class="g-cell">
+      <div class="g-cell-photo${e.photo ? '' : ' empty'}">
+        ${e.photo ? `<img src="${e.photo}" alt="" loading="lazy" />`
+                  : `<span class="g-cell-no">${i + 1}</span>`}
+      </div>
+      <figcaption>${meta || '&nbsp;'}</figcaption>
+    </figure>`;
+  }).join('');
+
+  return `<article class="g-card" data-id="${g.id}">
+    <header class="g-card-head">
+      <div class="g-head-left">
+        <img class="g-head-logo" src="./assets/icons/logo.png" alt="" />
+        <div class="g-head-titles"><strong>GROWTH UPDATE</strong><span>성장 기록</span></div>
+      </div>
+      <span class="g-code">${escapeHtml(g.code) || '—'}</span>
+    </header>
+    <div class="g-names">
+      <h3 class="g-ko">${escapeHtml(g.nameKo) || '이름 없음'}</h3>
+      <span class="g-en">${escapeHtml(g.nameEn)}</span>
+    </div>
+    <div class="g-grid">${cells}</div>
+    <footer class="g-card-foot">
+      <span>Record over volume.</span>
+      <span class="g-foot-brand">052_CRESTIES</span>
+    </footer>
+    <div class="g-card-actions">
+      <button type="button" class="ghost" data-gedit="${g.id}">편집</button>
+      <button type="button" class="danger" data-gdel="${g.id}">삭제</button>
+    </div>
+  </article>`;
+}
+
+function openGrowthModal(id = null) {
+  if (!sb) { toast('Supabase 설정이 필요합니다.'); return; }
+  growthEditingId = id;
+  const form = $('#growth-form');
+  form.reset();
+  if (id) {
+    const g = state.growth.find(x => x.id === id);
+    if (!g) return;
+    $('#growth-modal-title').textContent = '성장기록 편집';
+    form.nameKo.value = g.nameKo;
+    form.nameEn.value = g.nameEn;
+    form.code.value = g.code;
+    growthEntries = g.entries.map(e => ({ ...e }));
+  } else {
+    $('#growth-modal-title').textContent = '새 성장기록';
+    growthEntries = Array.from({ length: GROWTH_SLOTS }, () => ({ photo: '', date: '', weight: '' }));
+  }
+  renderGrowthSlots();
+  $('#growth-modal').showModal();
+}
+
+function renderGrowthSlots() {
+  $('#g-slots').innerHTML = growthEntries.map((e, i) => `
+    <div class="g-slot" data-i="${i}">
+      <button type="button" class="g-slot-photo${e.photo ? '' : ' empty'}" data-gphoto="${i}" aria-label="${i + 1}회차 사진">
+        ${e.photo ? `<img src="${e.photo}" alt="" />`
+                  : `<span class="g-slot-cam">📷<small>${i + 1}회차</small></span>`}
+        ${e.photo ? `<span class="g-slot-x" data-gremove="${i}" role="button" aria-label="사진 삭제">✕</span>` : ''}
+      </button>
+      <input class="g-slot-date"   type="date" data-gdate="${i}"   value="${escapeHtml(e.date)}" />
+      <input class="g-slot-weight" type="text" inputmode="decimal" data-gweight="${i}" value="${escapeHtml(e.weight)}" placeholder="무게(g)" maxlength="8" />
+    </div>`).join('');
+}
+
+// 슬롯 입력값(날짜/무게)을 메모리로 동기화 — 사진 교체 시 입력값 보존
+function syncGrowthInputs() {
+  $$('#g-slots .g-slot').forEach(slot => {
+    const i = Number(slot.dataset.i);
+    if (!growthEntries[i]) return;
+    const d = slot.querySelector('[data-gdate]');
+    const w = slot.querySelector('[data-gweight]');
+    growthEntries[i].date = d ? d.value : '';
+    growthEntries[i].weight = w ? w.value.trim() : '';
+  });
+}
+
+function bindGrowth() {
+  $('#btn-new-growth').addEventListener('click', () => openGrowthModal(null));
+  $('#btn-growth-close').addEventListener('click', () => $('#growth-modal').close());
+  $('#btn-growth-cancel').addEventListener('click', () => $('#growth-modal').close());
+
+  // 카드 편집/삭제 (운영자)
+  $('#growth-list').addEventListener('click', async e => {
+    const ed = e.target.closest('[data-gedit]');
+    const dl = e.target.closest('[data-gdel]');
+    if (ed) { openGrowthModal(ed.dataset.gedit); return; }
+    if (dl) {
+      const g = state.growth.find(x => x.id === dl.dataset.gdel);
+      if (!g) return;
+      if (!confirm(`"${g.nameKo || g.code || '이 기록'}" 성장기록을 삭제할까요? 되돌릴 수 없습니다.`)) return;
+      try {
+        await removeGrowthRecord(g.id);
+        state.growth = state.growth.filter(x => x.id !== g.id);
+        renderGrowth();
+        toast('삭제했습니다.');
+      } catch (err) { console.error(err); toast('삭제 실패: ' + err.message, 4000); }
+    }
+  });
+
+  // 슬롯: 사진 추가/삭제
+  $('#g-slots').addEventListener('click', e => {
+    const rm = e.target.closest('[data-gremove]');
+    if (rm) {
+      e.stopPropagation();
+      syncGrowthInputs();
+      growthEntries[Number(rm.dataset.gremove)].photo = '';
+      renderGrowthSlots();
+      return;
+    }
+    const ph = e.target.closest('[data-gphoto]');
+    if (ph) { growthSlot = Number(ph.dataset.gphoto); $('#g-file').click(); }
+  });
+
+  // 사진 파일 선택 → 압축 → 해당 칸에 반영
+  $('#g-file').addEventListener('change', async e => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const url = await compressImage(file);
+      syncGrowthInputs();
+      growthEntries[growthSlot].photo = url;
+      renderGrowthSlots();
+    } catch (err) { console.error(err); toast('사진을 불러오지 못했습니다.'); }
+    e.target.value = '';
+  });
+
+  // 저장
+  $('#growth-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!sb) { toast('Supabase 설정이 필요합니다.'); return; }
+    syncGrowthInputs();
+    const f = e.target;
+    const nameKo = f.nameKo.value.trim();
+    const nameEn = f.nameEn.value.trim();
+    const code = f.code.value.trim();
+    if (!nameKo && !nameEn && !code) { toast('개체 이름이나 관리번호를 입력해주세요.'); return; }
+    const btn = f.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = '저장 중…';
+    try {
+      if (growthEditingId) {
+        const g = state.growth.find(x => x.id === growthEditingId);
+        const updated = { ...g, nameKo, nameEn, code, entries: growthEntries.map(x => ({ ...x })) };
+        await saveGrowthRecord(updated);
+        if (g) Object.assign(g, updated);
+      } else {
+        const g = { id: uid(), createdAt: Date.now(), nameKo, nameEn, code, entries: growthEntries.map(x => ({ ...x })) };
+        await saveGrowthRecord(g);
+        state.growth.unshift(g);
+      }
+      $('#growth-modal').close();
+      renderGrowth();
+      toast(growthEditingId ? '수정했습니다.' : '추가했습니다.');
+      growthEditingId = null;
+    } catch (err) {
+      console.error(err);
+      toast('저장 실패: ' + err.message, 4000);
+    } finally {
+      btn.disabled = false; btn.textContent = '저장';
+    }
+  });
+}
+
 // ───────── 운영자 모드 (Supabase Auth) ─────────
 function isAdmin() { return document.body.classList.contains('is-admin'); }
 
@@ -641,6 +893,7 @@ function applyAdmin(on) {
   $('#admin-bar').hidden = !on;
   if (location.hash.startsWith('#/g/')) $('#detail-actions').hidden = !on;
   render();
+  renderGrowth();
 }
 
 function translateAuthError(msg = '') {
@@ -702,7 +955,7 @@ function bindAdmin() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `creeum-catalog-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `052cresties-catalog-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
     toast('JSON으로 내보냈습니다.');
@@ -750,6 +1003,7 @@ async function init() {
   bindAdmin();
   bindInquiry();
   bindInquiryAdmin();
+  bindGrowth();
 
   if (!configured) {
     toast('Supabase 설정이 필요합니다. config.js를 확인하세요.', 5000);
@@ -766,6 +1020,7 @@ async function init() {
   $('#empty-msg').textContent = '불러오는 중…';
   $('#empty-state').hidden = false;
   await loadGeckos();
+  await loadGrowth();
 
   window.addEventListener('hashchange', navigate);
   navigate();

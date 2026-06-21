@@ -1,4 +1,4 @@
-// 크레이음 설정
+// 052_CRESTIES 설정
 // 1) supabase.com 에서 프로젝트 만든 뒤
 // 2) Project Settings > API Keys 에서 두 값 복사해서 아래 채우기
 // 3) 저장만 하면 끝 (빌드 불필요)

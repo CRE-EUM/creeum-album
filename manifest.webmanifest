@@ -1,13 +1,13 @@
 {
-  "name": "크레이음 개체 관리",
-  "short_name": "크레이음",
-  "description": "크레스티드 게코 개체·혈통·분양 관리 PWA",
+  "name": "052_CRESTIES",
+  "short_name": "052_CRESTIES",
+  "description": "052_CRESTIES — 울산에서 태어난 크레스티드게코의 출생과 성장을 기록하는 브리딩 브랜드",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0f1115",
-  "theme_color": "#0f1115",
+  "background_color": "#f4f3ef",
+  "theme_color": "#111111",
   "lang": "ko",
   "icons": [
     {
