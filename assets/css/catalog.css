@@ -961,9 +961,9 @@ body.is-admin .view { padding-bottom: 64px; }
 .char-portrait img { width: 86%; height: 86%; object-fit: contain; }
 .char-name {
   margin: 0;
-  font-family: var(--font-display);
+  font-family: var(--font-kr);
   font-weight: 400;
-  font-size: 52px; line-height: .85; letter-spacing: .02em;
+  font-size: 44px; line-height: .95; letter-spacing: 0;
 }
 .char-role {
   margin: 6px 0 0;
